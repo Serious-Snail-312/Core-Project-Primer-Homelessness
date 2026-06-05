@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Primer · Homelessness in San Francisco</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --sheltered: #3EB1C8;
+    --unsheltered: #002A3A;
+    --bg: #f5f4f2;
+    --ink: #1a1a1a;
+    --muted: #737373;
+    --rule: #D9D9D9;
+    --highlight: #A9431E;
+    --maroon: #800000;
+    --lake: #002A3A;
+    --tooltip-bg: #ffffff;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+  }
+
+  /* ── Page wrapper ── */
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #1a1a1a;
+  }
+
+  /* ── Header ── */
+  .page-header {
+    background: #800000;
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .page-header img {
+    width: 211px;
+    height: 91px;
+  }
+
+  .header-label {
+    display: block;
+    font-size: 0.72rem;
+    margin-top: 4px;
+    padding-left: 4px;
+  }
+
+  /* ── Body ── */
+  .page-body {
+    background: #fff;
+    border-width: medium 1px 1px;
+    border-style: none solid solid;
+    border-color: currentcolor #d9d9d9 #d9d9d9;
+    padding: 28px 60px 40px;
+  }
+
+  .intro {
+    font-size: 0.9rem;
+    color: #737373;
+    line-height: 1.65;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #D9D9D9;
+  }
+
+  h2.section {
+    margin-top: 2.25rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.4em;
+    color: #800000;
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: bold;
+  }
+
+  p.body-text {
+    margin-bottom: 1rem;
+  }
+
+  a { color: #800000; }
+
+  /* ── Callout boxes ── */
+  .callout-maroon {
+    background: #faeded;
+    border-left: 4px solid #800000;
+    padding: 12px 16px;
+    margin-top: 8px;
+    margin-bottom: 16px;
+  }
+
+  .callout-blue {
+    background: #e4ebf7;
+    border-left: 4px solid #007396;
+    padding: 12px 16px;
+    margin-top: 8px;
+    margin-bottom: 16px;
+  }
+
+  .callout-blue a { color: #007396; }
+
+  .callout-gray {
+    background: #f3f3f3;
+    padding: 16px 18px;
+    margin-top: 12px;
+    margin-bottom: 16px;
+    border: 1px solid #d9d9d9;
+  }
+
+  .callout-gray ul {
+    margin: 0 0 0 18px;
+    padding: 0;
+  }
+
+  .callout-gray li {
+    margin-bottom: 12px;
+  }
+
+  .callout-gray li:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ── Definition box ── */
+  .def-box {
+    background: #f3f3f3;
+    padding: 16px 18px;
+    margin-top: 12px;
+    margin-bottom: 16px;
+    border: 1px solid #d9d9d9;
+  }
+
+  .def-box h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+    color: #800000;
+    font-family: Helvetica, Arial, sans-serif;
+  }
+
+  .def-box ul {
+    margin: 0 0 0 18px;
+    padding: 0;
+  }
+
+  .def-box li { margin-bottom: 8px; }
+  .def-box li:last-child { margin-bottom: 0; }
+
+  /* ── Chart wrapper ── */
+  .chart-embed {
+    margin: 1.5rem auto 1.75rem;
+    max-width: 720px;
+  }
+
+  /* ── HR ── */
+  .section-rule {
+    border-width: 2px medium medium;
+    border-style: solid none none;
+    border-color: #d9d9d9 currentcolor currentcolor;
+    margin: 2.5rem 0 1.5rem;
+  }
+
+  /* ── Works Cited ── */
+  .works-cited h2 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.2em;
+    color: #800000;
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: bold;
+  }
+
+  .works-cited p {
+    font-size: 0.78rem;
+    color: #737373;
+    line-height: 1.65;
+    margin-bottom: 0.5rem;
+  }
+
+  .works-cited a { color: #002a3a; }
+
+  /* ══════════════════════════════════════
+     SHARED CHART STYLES
+     (merged from all five chart files)
+  ══════════════════════════════════════ */
+
+  /* Card */
+  .card {
+    background: #fff;
+    border: 1px solid var(--rule);
+    padding: 2.5rem 2.5rem 2.5rem;
+    width: 100%;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+
+  .chart-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--ink);
+    margin-bottom: 0.35rem;
+    max-width: 600px;
+  }
+
+  .chart-subtitle {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.01em;
+  }
+
+  .legend {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.4rem;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  .legend-swatch { width: 14px; height: 14px; flex-shrink: 0; }
+  .legend-line { width: 22px; height: 3px; flex-shrink: 0; border-radius: 2px; }
+
+  .chart-wrap { position: relative; width: 100%; }
+
+  .y-axis-label {
+    position: absolute;
+    left: -2.6rem;
+    top: 50%;
+    transform: translateY(-50%) rotate(-90deg);
+    font-size: 0.72rem;
+    color: var(--muted);
+    white-space: nowrap;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .y-label-left {
+    position: absolute;
+    left: -3.2rem;
+    top: 50%;
+    transform: translateY(-50%) rotate(-90deg);
+    font-size: 0.68rem;
+    color: var(--muted);
+    white-space: nowrap;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    font-weight: 500;
+    line-height: 1.3;
+    text-align: center;
+  }
+
+  .grid-and-bars { margin-left: 3rem; position: relative; }
+  .grid-and-chart { margin-left: 3.8rem; position: relative; }
+
+  .annotation-wrap { position: absolute; left: 0; right: 0; z-index: 2; pointer-events: none; }
+  .annotation-line { border-top: 1.5px dashed var(--highlight); width: 100%; }
+  .annotation-label { font-size: 0.72rem; color: var(--highlight); font-weight: 500; padding-top: 0.25rem; }
+
+  svg { display: block; width: 100%; overflow: visible; }
+
+  .bar-sheltered { fill: var(--sheltered); transition: opacity 0.15s; cursor: pointer; }
+  .bar-unsheltered { fill: var(--unsheltered); transition: opacity 0.15s; cursor: pointer; }
+  .bar-first { fill: var(--maroon); transition: opacity 0.15s; cursor: pointer; }
+  .bar-other { fill: var(--lake); transition: opacity 0.15s; cursor: pointer; }
+
+  .bar-group:hover .bar-sheltered,
+  .bar-group:hover .bar-unsheltered,
+  .bar-group:hover .bar-first,
+  .bar-group:hover .bar-other { opacity: 0.82; }
+
+  .bar-label { font-family: 'DM Sans', sans-serif; font-size: 11px; fill: #fff; font-weight: 600; pointer-events: none; letter-spacing: 0.01em; }
+  .bar-label-pct { font-family: 'Source Serif 4', serif; font-size: 20px; fill: #fff; font-weight: 700; pointer-events: none; }
+  .bar-label-desc { font-family: 'DM Sans', sans-serif; font-size: 11px; fill: rgba(255,255,255,0.88); font-weight: 400; pointer-events: none; }
+
+  .axis-label { font-family: 'DM Sans', sans-serif; font-size: 11px; fill: var(--muted); font-weight: 500; }
+  .year-label { font-family: 'Source Serif 4', serif; font-size: 15px; fill: var(--ink); font-weight: 600; }
+  .total-label { font-family: 'DM Sans', sans-serif; font-size: 9.5px; fill: var(--muted); font-weight: 600; pointer-events: none; }
+  .callout-label { font-family: 'DM Sans', sans-serif; font-size: 11.5px; font-weight: 600; fill: var(--maroon); }
+  .callout-sub { font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 400; fill: var(--muted); }
+
+  .grid-line { stroke: var(--rule); stroke-width: 1; }
+
+  .line-total { fill: none; stroke: #A9431E; stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+  .line-large { fill: none; stroke: #002A3A; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  .line-sf    { fill: none; stroke: #002A3A; stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+  .line-us    { fill: none; stroke: #800000; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+
+  /* Tooltips — shared base */
+  .tooltip {
+    position: fixed;
+    background: var(--tooltip-bg);
+    border: 1px solid var(--rule);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    padding: 0.85rem 1rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 100;
+    min-width: 200px;
+  }
+  .tooltip.visible { opacity: 1; }
+
+  .tooltip-year, .tooltip-date {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #002A3A;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 0.4rem;
+  }
+
+  .tooltip-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.2rem;
+    font-size: 0.78rem;
+    padding: 0.18rem 0;
+    color: var(--muted);
+  }
+  .tooltip-row strong { color: var(--ink); font-weight: 600; }
+
+  .tooltip-swatch { display: inline-block; width: 9px; height: 9px; border-radius: 1px; margin-right: 0.35rem; flex-shrink: 0; }
+  .tooltip-dot    { display: inline-block; width: 8px;  height: 8px;  border-radius: 50%; margin-right: 0.3rem; }
+
+  .tooltip-total {
+    margin-top: 0.45rem;
+    padding-top: 0.4rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.78rem;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .tooltip-note {
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-top: 0.4rem;
+    padding-top: 0.35rem;
+    border-top: 1px solid var(--rule);
+    font-style: italic;
+  }
+
+  /* Citation */
+  .citation {
+    margin-top: 1.6rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+    min-height: 3.5rem;
+  }
+  .citation p { font-size: 0.72rem; color: var(--muted); line-height: 1.6; margin-bottom: 0.25rem; }
+  .citation p strong { color: var(--ink); font-weight: 600; }
+  .citation a { color: var(--sheltered); text-decoration: underline; text-underline-offset: 2px; }
+
+  /* Chart-specific border-top colors */
+  #chart-national  { border-top: 4px solid #3EB1C8; }
+  #chart-firsttime { border-top: 4px solid #800000; }
+  #chart-sf        { border-top: 4px solid #800000; }
+  #chart-zhvi      { border-top: 4px solid #800000; }
+  #chart-tents     { border-top: 4px solid #800000; }
+
+  /* Chart2 header band */
+  .header-band {
+    background: #f0f4f5;
+    border-left: 4px solid #002A3A;
+    padding: 0.85rem 1rem 0.8rem;
+    margin-bottom: 1.6rem;
+  }
+  .header-band .chart-title { max-width: 100%; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ── Header ── -->
+  <div class="page-header">
+    <div>
+      <strong>Harris School of Public Policy · Core Project</strong>
+      <span class="header-label">Primer &middot; Homelessness in San Francisco</span>
+    </div>
+  </div>
+
+  <!-- ── Body ── -->
+  <div class="page-body">
+
+    <p class="intro">Peer MPPs have developed a set of primers to help orient students to each topic area. These documents are not intended to be exhaustive; rather, they reflect one student's synthesis of the broad questions and core debates at play. Students are encouraged to engage the primers critically&mdash;read closely, draw their own conclusions, and investigate the cited sources to deepen their own understanding of the Core Scenarios and refine their individual approach.</p>
+
+    <!-- ══ National Context ══ -->
+    <h2 class="section">National Context</h2>
+
+    <p class="body-text">On a single night in January 2024, 771,480 people experienced homelessness in the U.S., the highest figure the U.S. Department of Housing and Urban Development (HUD) has ever <a href="https://www.huduser.gov/portal/datasets/ahar/2024-ahar-part-1-pit-estimates-of-homelessness-in-the-us.html">recorded</a>. Analysts point to a combination of structural forces: an affordable housing shortage, inflation, stagnant wages among low- and middle-income households, and the enduring effects of systemic racism. Pandemic-era protections such as eviction moratoriums and expanded Child Tax Credits also expired, while disasters, public-health shocks, and immigration dynamics strained local systems.</p>
+
+    <!-- Chart 1: National PIT Count -->
+    <div class="chart-embed" id="chart-national">
+      <div class="card">
+  <div class="chart-title">People Experiencing Homelessness in the United States, 2015–2024</div>
+  <div class="chart-subtitle">Annual Point-in-Time count · Sheltered and unsheltered populations</div>
+
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-swatch" style="background:var(--sheltered)"></div>
+      Sheltered
+    </div>
+    <div class="legend-item">
+      <div class="legend-swatch" style="background:var(--unsheltered)"></div>
+      Unsheltered
+    </div>
+  </div>
+
+  <div class="chart-wrap">
+    <div class="y-axis-label">Number of people</div>
+    <div class="grid-and-bars">
+      <div class="annotation-wrap" id="c1-annotationWrap">
+        <div class="annotation-line"></div>
+        <div class="annotation-label">771,480 people experienced homelessness during the 2024 Point-in-Time count</div>
+      </div>
+      <svg id="c1-chart" viewBox="0 0 700 380" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+  </div>
+
+  <div class="citation">
+    <p><strong>Source:</strong> HUD, <em>2024 AHAR: Part 1 — Point-in-Time Estimates of Homelessness</em>, 2024.</p>
+    <p><strong>Note:</strong> 2021 excluded due to COVID-19 disruptions to data collection.</p>
+  </div>
+</div>
+    </div>
+
+    <p class="body-text">The composition of that count is also shifting. An increasing share of people entering shelters are doing so for the first time, suggesting that structural economic pressures are pulling new populations into homelessness rather than cycling the same individuals through the system repeatedly.</p>
+
+    <!-- Chart 2: First-Time Sheltered -->
+    <div class="chart-embed" id="chart-firsttime">
+      <div class="card">
+  <div class="header-band">
+    <div class="chart-title">
+      First-time sheltered homelessness over the course of the year is increasing
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-swatch" style="background:var(--first-time)"></div>
+      First-Time Shelter Residents
+    </div>
+    <div class="legend-item">
+      <div class="legend-swatch" style="background:var(--other)"></div>
+      All Other Shelter Residents
+    </div>
+  </div>
+
+  <div class="chart-wrap">
+    <div class="y-axis-label">Number of People</div>
+    <div class="grid-and-bars">
+      <svg id="c2-chart" viewBox="0 0 700 400" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+  </div>
+
+  <div class="citation">
+    <p><strong>Source:</strong> HUD, <em>2022 AHAR: Part 2 — Annual Estimates of Sheltered Homelessness</em>, 2024.</p>
+    <p><strong>Note:</strong> *First-time residents have never been homeless or not within two years. Excludes unsheltered persons.</p>
+  </div>
+</div>
+    </div>
+
+    <!-- ══ Key Definitions ══ -->
+    <h2 class="section">Key Definitions</h2>
+
+    <p class="body-text">HUD's core <a href="https://www.hudexchange.info/homelessness-assistance/coc-esg-virtual-binders/coc-esg-homeless-eligibility/four-categories/">categories</a> include: <strong>(1) Literally Homeless</strong> (sheltered or unsheltered), <strong>(2) Imminent Risk of Homelessness</strong>, <strong>(3) Certain youth and families under other federal statutes with persistent instability</strong>, and <strong>(4) Fleeing or Attempting to Flee Domestic Violence</strong>. PIT (Point-in-Time) counts primarily enumerate <strong>Category 1</strong>, meaning many precariously housed households are <strong>not</strong> in the PIT numerator despite being at risk and eligible for some services through other programs.</p>
+
+    <div class="def-box">
+      <h3>Sheltered vs. Unsheltered</h3>
+      <ul>
+        <li><strong>Unsheltered:</strong> Sleeping in places "not meant for human habitation" (e.g., streets, parks, vehicles).</li>
+        <li><strong>Sheltered:</strong> Emergency shelter, safe haven, or transitional housing on the night of the PIT count.</li>
+      </ul>
+    </div>
+
+    <p class="body-text">San Francisco's <a href="https://www.sf.gov/file/sanfranciscococ-esgdeskguide6424"><strong>Continuum of Care (CoC)</strong></a> is a group of organizations serving their community's homeless population, led by the city's <strong>Department of Homelessness and Supportive Housing (HSH)</strong> and overseen by the <strong>Local Homeless Coordinating Board (LHCB)</strong>&mdash;entities that coordinate PIT methodology and system strategy and publish routine data.</p>
+
+    <!-- ══ Causes of Homelessness ══ -->
+    <h2 class="section">Causes of Homelessness</h2>
+
+    <p class="body-text">In their book <em>Homelessness is a Housing Problem</em>, Gregg Colburn and Clayton Page Aldern argue that median rents in a city are the strongest predictor of that city's homelessness problem, while other common explanations, such as poverty, drug use, or systemic injustice, fail to account for regional variation in homelessness rates. In fact, Colburn and Aldern provide evidence that poverty rates in cities are negatively correlated with homelessness. They claim rising housing prices and a lack of affordable housing supply are <a href="https://homelessnesshousingproblem.com/">the primary drivers</a> of homelessness.</p>
+
+    <p class="body-text">New research using linked administrative data <a href="https://economics.yale.edu/sites/default/files/2024-02/Homelessness%20and%20the%20Persistence%20of%20Deprivation.pdf">indicates</a> that homelessness often arises in the context of long-term, severe material deprivation. Many (roughly half) people experiencing homelessness report some level of employment, and <a href="https://www.nprillinois.org/equity-justice/2024-06-13/uchicago-research-produces-surprising-information-about-homelessness">more than 90%</a> report receiving either wages or social safety-net benefits. However, these sources of income are too persistently low to sustain stable housing. Thus, homelessness is a result of prolonged deprivation, not just sudden shocks.</p>
+
+    <p class="body-text">Individual factors such as mental illness or drug use can exacerbate extended periods of poverty, but do not account for the full scope of the homelessness problem in America or in San Francisco. Nationally, the <a href="https://www.kff.org/medicaid/five-key-facts-about-people-experiencing-homelessness/">share of adults</a> experiencing homelessness with a serious mental illness (22%) or a chronic substance use disorder (18%) is substantial but still a minority of the overall population counted in 2024 (with overlap between these groups). Behavioral health is consequently part of the story, but not the full narrative.</p>
+
+    <div class="callout-maroon">Homelessness is <a href="https://endhomelessness.org/state-of-homelessness/#who_does_homelessness_impact">disproportionately concentrated</a> among people of color and marginalized groups such as individuals with disabilities or youth with gender identities outside of the binary.</div>
+
+    <!-- ══ Scope in SF ══ -->
+    <h2 class="section">Scope of Homelessness in San Francisco</h2>
+
+    <p class="body-text">San Francisco's latest HUD-mandated <a href="https://media.api.sf.gov/documents/2024_San_Francisco_Point-in-Time_Count_Report_8_13_24.pdf">Point-in-Time (PIT) count</a> was conducted the night of January 30, 2024. It found that 8,323 people were experiencing homelessness, 52% (4,354 people) of whom were unsheltered. According to follow-up survey work, 66% of respondents said their current spell of homelessness had lasted a year or more. Over the course of an entire year, more than 20,000 people seek homeless services, far more than the one-night snapshot captures.</p>
+
+    <p class="body-text">Unsheltered homelessness in the 2024 count dropped 16% from 2019, while sheltered homelessness increased 39% since 2019. According to the <a href="https://media.api.sf.gov/documents/2024_PIT_Slide_Brief.pdf">PIT count report</a>, people experiencing homelessness in San Francisco are more likely to be sheltered than ever before. The city attributes this to expanded shelter inventory and utilization.</p>
+
+    <!-- Chart SF: SF PIT Count -->
+    <div class="chart-embed" id="chart-sf">
+      <div class="card">
+  <div class="chart-title">Number of People Experiencing Homelessness during Each PIT Count, San Francisco, 2005–2024</div>
+  <div class="chart-subtitle">Annual Point-in-Time count · Sheltered and unsheltered populations</div>
+
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-swatch" style="background:var(--sheltered)"></div>
+      Sheltered
+    </div>
+    <div class="legend-item">
+      <div class="legend-swatch" style="background:var(--unsheltered)"></div>
+      Unsheltered
+    </div>
+  </div>
+
+  <div class="chart-wrap">
+    <div class="y-axis-label">Number of People</div>
+    <div class="grid-and-bars">
+      <svg id="csf-chart" viewBox="0 0 700 380" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+  </div>
+
+  <div class="citation">
+    <p><strong>Source:</strong> SF Dept. of Homelessness and Supportive Housing, <em>Point-in-Time Count Reports</em>, 2005–2024.</p>
+    <p><strong>Note:</strong> Unsheltered count not conducted in 2021 (COVID-19); year excluded. Unsheltered counts are biennial; sheltered counts annual.</p>
+  </div>
+</div>
+    </div>
+
+    <div class="callout-blue"><strong>A note on PIT count methodology:</strong> There are some well-known blind spots in the PIT Count methodology, and San Francisco announced <a href="https://www.sf.gov/san-francisco-point-time-pit-count">significant changes</a> for the 2026 count, which was conducted on January 29. These changes include moving the count from nighttime to early morning, when <a href="https://sfstandard.com/2026/01/13/sf-hud-homeless-count-changes/">more unsheltered people are sleeping</a>, to capture a larger share of the unsheltered population. These changes were implemented to improve accuracy but may hamper year-to-year comparisons.</div>
+
+    <!-- ══ Historical & Economic Context ══ -->
+    <h2 class="section">Historical and Economic Context</h2>
+
+    <p class="body-text">Homelessness has been a significant issue in the Bay Area <a href="https://www.kqed.org/lowdown/22644">since the late 1970s</a>. San Francisco mayors have cycled through short-term emergency responses, service expansion, punitive enforcement, and housing-focused strategies, yet <a href="https://www.cohsf.org/Punishing.pdf">none have credibly reversed</a> the city's overall trajectory of homelessness. Early administrations like Feinstein's (1978&ndash;88) treated homelessness as temporary and relied heavily on shelters and short-stay hotel programs. Successors Agnos (1988&ndash;92) and Jordan (1992&ndash;96) swung between social-service improvements and criminalization strategies, including the Matrix Program, while Brown (1996&ndash;2004) expanded affordable housing and ultimately abandoned the effort as "unsolvable." Mayors Newsom (2004&ndash;10), Lee (2011&ndash;17), and Breed (2017&ndash;25) <a href="https://www.kqed.org/lowdown/22644">sought to improve access</a> to services through navigation centers, expanded shelter capacity, and coordinated entry to consolidate service providers. Despite these efforts, the city's daily homeless population has remained high, with inflow persistently outpacing exits.</p>
+
+    <p class="body-text">According to <a href="https://www.zillow.com/research/data/">Zillow data</a>, typical prices for homes in the lower part of the pricing distribution (5th to 35th percentiles) in San Francisco more than tripled from $221,812 in April 2012 to a peak of $747,901 in June 2022. While this meteoric rise in home prices has halted in recent years as tech workers have faced accelerating layoffs, the <a href="https://missionlocal.org/2025/09/sf-evictions-rents-rising-ai-boom/">AI boom</a> has ensured that both rents and home prices remain high, and more San Francisco families are having difficulty affording housing. According to the <a href="https://nlihc.org/gap">National Low Income Housing Coalition</a>, San Francisco only has 32 available affordable rental units for every 100 extremely low-income households.</p>
+
+    <!-- Chart ZHVI: Home Prices -->
+    <div class="chart-embed" id="chart-zhvi">
+      <div class="card">
+  <div class="chart-title">Bottom-Tier Home Prices in San Francisco Remain High</div>
+  <div class="chart-subtitle">Typical home value (5th–35th percentile), January 2000–January 2026</div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-line" style="background:var(--sf)"></div>San Francisco, CA</div>
+    <div class="legend-item"><div class="legend-line" style="background:var(--us)"></div>United States</div>
+  </div>
+  <div class="chart-wrap">
+    <div class="y-axis-label">Typical Home Price<br>(5th–35th percentile), $</div>
+    <div class="grid-and-chart">
+      <svg id="czhvi-chart" viewBox="0 0 700 360" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+  </div>
+  <div class="citation">
+    <p><strong>Source:</strong> Zillow Research, <em>Zillow Home Value Index (ZHVI): Bottom Tier, All Homes, Smoothed and Seasonally Adjusted</em>, accessed March 2026.</p>
+    <p><strong>Note:</strong> Bottom tier covers the 5th–35th percentile of home values. SF metro includes San Francisco, San Mateo, and Marin counties.</p>
+  </div>
+</div>
+    </div>
+
+    <!-- ══ Recent Changes Under Mayor Lurie ══ -->
+    <h2 class="section">Recent Changes Under Mayor Lurie</h2>
+
+    <p class="body-text">Mayor Daniel Lurie campaigned on issues of public safety and the need for more housing. He refers to homelessness in San Francisco as "a Fentanyl crisis" (<a href="https://podcasts.apple.com/gr/podcast/san-franciscos-new-mayor-on-homelessness-unaffordability/id1056200096?i=1000735010003">6:30 mark</a>). He has begun implementing a strategy he calls "<a href="https://www.sf.gov/news-mayor-lurie-launches-integrated-neighborhood-street-teams-on-coordinated-response-to-street-conditions-as-part-of-the-breaking-the-cycle-directive">Breaking the Cycle</a>," which provides for more interim housing and treatment beds, coordinating street outreach across agencies and within neighborhoods, and piloting new stabilization or triage centers. The city <a href="https://www.sf.gov/news-mayor-lurie-celebrates-nearly-40-million-in-state-funding-to-address-homelessness-in-san-francisco">claims</a> to have opened at least 600 new, treatment-focused beds. City-funded programs are also now prohibited from distributing safe drug-use supplies without counseling or connections to treatment.</p>
+
+    <p class="body-text">These changes have already had some impacts visible in the data: visible tents <a href="https://www.sf.gov/data--healthy-streets-data-and-information">reported</a> by the city have fallen to multi-year lows. <a href="https://missionlocal.org/2025/07/san-francisco-homeless-tent-decrease/">Advocates suggest</a> that this decrease in tents may be due to "the homeless encampment <a href="https://missionlocal.org/2024/08/breed-and-sweeps-and-aggressive-and-division-street-and-bayshore/">sweeps</a> the city started during the London Breed administration in August 2024, where workers, newly emboldened by a <a href="https://missionlocal.org/2024/06/sfs-dishonest-legal-brief-lets-supreme-court-criminalize-homelessness/">U.S. Supreme Court decision</a>, confiscated tents and belongings," rather than an improvement in access to shelter.</p>
+
+    <!-- Chart Tents -->
+    <div class="chart-embed" id="chart-tents">
+      <div class="card">
+  <div class="chart-title">San Francisco Homeless Tent Count Falls to Pre-Pandemic Low</div>
+  <div class="chart-subtitle">Quarterly count of tents and structures on city streets, April 2019–June 2025</div>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-line" style="background:var(--total)"></div>
+      Total tents &amp; structures
+    </div>
+    <div class="legend-item">
+      <div class="legend-line" style="background:var(--large)"></div>
+      Sites with 6+ tents or structures
+    </div>
+  </div>
+  <div class="chart-wrap">
+    <div class="y-label-left">Tents &amp; structures counted</div>
+    <div class="grid-and-chart">
+      <svg id="ctents-chart" viewBox="0 0 700 480" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+  </div>
+  <div class="citation">
+    <p><strong>Source:</strong> San Francisco Department of Emergency Management, "Healthy Streets Data and Information," 2025; Lu, Xueer, "San Francisco Homeless Tent Tally Hits New Low," <em>Mission Local</em>, July 4, 2025.</p>
+    <p><strong>Note:</strong> Bimonthly through 2021, quarterly from 2022. Large encampments = 6+ tents or structures. Single-day snapshot; subject to fluctuation.</p>
+  </div>
+</div>
+    </div>
+
+    <p class="body-text">Meanwhile, Super Bowl LX, held on February 8, 2026 in the San Francisco Bay Area, led to temporary shelter expansions and renewed scrutiny of how the city manages street conditions for visitors. Community members <a href="https://www.kqed.org/news/12072054/san-francisco-opens-shelter-beds-for-unhoused-people-forced-to-move-during-super-bowl-week">criticize</a> short-term measures that prioritize optics over durable paths to housing.</p>
+
+    <!-- ══ Open Questions ══ -->
+    <h2 class="section">Selected Open Questions</h2>
+
+    <div class="callout-gray">
+      <ul>
+        <li><strong>Enforcement vs. engagement.</strong> After recent <a href="https://www.supremecourt.gov/opinions/23pdf/23-175_19m2.pdf">court decisions</a>, cities have greater leeway to enforce encampment restrictions. Supporters argue such restrictions improve safety and provide a pathway to services; critics warn that enforcement without guaranteed and acceptable shelter is cruel, creates churn in the shelter system, and erodes trust.</li>
+        <li><strong>Interim vs. permanent housing.</strong> <a href="https://www.vox.com/homelessness/411358/homeless-tent-encampment-california-grants-pass-tenant-rent-housing-dignity-moves">Interim housing models</a> such as motels or tiny homes can be delivered in months rather than years, potentially at lower cost. But without rapid, reliable routes to permanent housing ("exits"), interim housing can lengthen stays and tie up scarce operating dollars.</li>
+        <li><strong>Measurement.</strong> PIT counts, tent tallies, and "encampment engagement" metrics each tell partial stories. Methodological updates (e.g., better enumeration of families and people in vehicles) <a href="https://housingequity.stanford.edu/sites/g/files/sbiybj27746/files/media/file/hidden-from-sight_tailoring-san-francisco-s-point-in-time-count-to-reach-invisible-families.pdf">may correct past undercounts</a> but can also be read as "data gaming" in polarized discourse. Expect arguments over what success should be measured by&mdash;reduced inflow, shorter time homeless, stable exits, reduced mortality and harms, or cleaner streets&mdash;and in what balance.</li>
+        <li><strong>Harm reduction.</strong> Advocates of harm reduction policies <a href="https://www.theatlantic.com/podcasts/radio-atlantic/no-easy-fix/">argue</a> that programs such as needle exchanges keep the community safe from infectious diseases or tainted drugs. Critics aim to incentivize seeking out and receiving treatment, arguing that this may be the most compassionate solution, even if the treatment is not voluntary.</li>
+      </ul>
+    </div>
+
+    <div class="callout-maroon"><strong>Remember:</strong> The Core Project is a rehearsal for the professional policy work you will do after graduating from Harris. Engage these questions with rigor, intellectual honesty, and a clear-eyed view of the evidence.</div>
+
+    <hr class="section-rule">
+
+    <!-- ══ Works Cited ══ -->
+    <div class="works-cited">
+      <h2>Works Cited</h2>
+      <p>Brooks, Ethan. 2023. "No Easy Fix." <em>Radio Atlantic</em>. <a href="https://www.theatlantic.com/podcasts/radio-atlantic/no-easy-fix/">https://www.theatlantic.com/podcasts/radio-atlantic/no-easy-fix/</a>.</p>
+      <p><em>City of Grants Pass v. Johnson</em>. 603 U.S. 520 (2024). <a href="https://www.supremecourt.gov/opinions/23pdf/23-175_19m2.pdf">https://www.supremecourt.gov/opinions/23pdf/23-175_19m2.pdf</a>.</p>
+      <p>Coalition on Homelessness. 2015. <em>Punishing the Poorest: How the Criminalization of Homelessness Perpetuates Poverty in San Francisco</em>. San Francisco: Coalition on Homelessness. <a href="https://www.cohsf.org/Punishing.pdf">https://www.cohsf.org/Punishing.pdf</a>.</p>
+      <p>Cohen, Rachel. 2025. "Cities Are Trying a New Approach to Clearing Homeless Tent Encampments." <em>Vox</em>, May 2, 2025. <a href="https://www.vox.com/homelessness/411358/homeless-tent-encampment-california-grants-pass-tenant-rent-housing-dignity-moves">https://www.vox.com/homelessness/411358/</a>.</p>
+      <p>Colburn, Gregg, and Clayton Page Aldern. 2022. <em>Homelessness Is a Housing Problem: How Structural Factors Explain U.S. Patterns</em>. Berkeley: University of California Press. <a href="https://homelessnesshousingproblem.com/">https://homelessnesshousingproblem.com/</a>.</p>
+      <p>Eskenazi, Joe. 2024. "San Francisco's Dishonest Legal Brief Helped U.S. Supreme Court Criminalize Homelessness." <em>Mission Local</em>, June 28, 2024. <a href="https://missionlocal.org/2024/06/sfs-dishonest-legal-brief-lets-supreme-court-criminalize-homelessness/">https://missionlocal.org/2024/06/</a>.</p>
+      <p>Green, Mina. 2017. "Timeline: The Frustrating Political History of Homelessness in San Francisco." <em>KQED</em>, June 26, 2017. <a href="https://www.kqed.org/lowdown/22644">https://www.kqed.org/lowdown/22644</a>.</p>
+      <p>Johnson, Sydney. 2026. "San Francisco Opens Homeless Shelter for People Forced to Move during Super Bowl." <em>KQED</em>, February 4, 2026. <a href="https://www.kqed.org/news/12072054/san-francisco-opens-shelter-beds-for-unhoused-people-forced-to-move-during-super-bowl-week">https://www.kqed.org/news/12072054/</a>.</p>
+      <p>KFF. 2025. "Five Key Facts about People Experiencing Homelessness." September 8, 2025. <a href="https://www.kff.org/medicaid/five-key-facts-about-people-experiencing-homelessness/">https://www.kff.org/medicaid/five-key-facts-about-people-experiencing-homelessness/</a>.</p>
+      <p>Lloyd, Zack Palta, and Adam Valen Neely. 2024. "Mayor Breed's 'Very Aggressive' Homeless Sweeps Hit the Mission, Bayview." <em>Mission Local</em>, August 2024. <a href="https://missionlocal.org/2024/08/breed-and-sweeps-and-aggressive-and-division-street-and-bayshore/">https://missionlocal.org/2024/08/</a>.</p>
+      <p>Lu, Xueer. 2025. "San Francisco Homeless Tent Tally Hits New Low." <em>Mission Local</em>, July 4, 2025. <a href="https://missionlocal.org/2025/07/san-francisco-homeless-tent-decrease/">https://missionlocal.org/2025/07/san-francisco-homeless-tent-decrease/</a>.</p>
+      <p>McKinney, Maureen Foertsch. 2024. "UChicago Research Produces Surprising Information about Homelessness." <em>NPR Illinois</em>, June 13, 2024. <a href="https://www.nprillinois.org/equity-justice/2024-06-13/uchicago-research-produces-surprising-information-about-homelessness">https://www.nprillinois.org/equity-justice/2024-06-13/</a>.</p>
+      <p>Meyer, Bruce D., Angela Wyse, Grace Meyer, Alexandra Grunwaldt, and Derek Wu. 2024. "Homelessness and the Persistence of Deprivation: Income, Employment, and Safety Net Participation." Working paper, University of Chicago. <a href="https://economics.yale.edu/sites/default/files/2024-02/Homelessness%20and%20the%20Persistence%20of%20Deprivation.pdf">https://economics.yale.edu/</a>.</p>
+      <p>National Alliance to End Homelessness. 2025. "State of Homelessness: 2025 Edition." September 4, 2025. <a href="https://endhomelessness.org/state-of-homelessness/">https://endhomelessness.org/state-of-homelessness/</a>.</p>
+      <p>National Low Income Housing Coalition. 2024. <em>The Gap: A Shortage of Affordable Homes</em>. Washington, DC: National Low Income Housing Coalition. <a href="https://nlihc.org/gap">https://nlihc.org/gap</a>.</p>
+      <p>Office of the Mayor, City and County of San Francisco. 2025. "Mayor Lurie Launches Integrated Neighborhood Street Teams." March 25, 2025. <a href="https://www.sf.gov/news-mayor-lurie-launches-integrated-neighborhood-street-teams-on-coordinated-response-to-street-conditions-as-part-of-the-breaking-the-cycle-directive">https://www.sf.gov/news-mayor-lurie-launches-integrated-neighborhood-street-teams</a>.</p>
+      <p>Office of the Mayor, City and County of San Francisco. 2026. "Mayor Lurie Celebrates Nearly $40 Million in State Funding to Address Homelessness in San Francisco." January 16, 2026. <a href="https://www.sf.gov/news-mayor-lurie-celebrates-nearly-40-million-in-state-funding-to-address-homelessness-in-san-francisco">https://www.sf.gov/news-mayor-lurie-celebrates-nearly-40-million/</a>.</p>
+      <p>San Francisco Department of Emergency Management. 2025. "Healthy Streets Data and Information." SF.gov. <a href="https://www.sf.gov/data--healthy-streets-data-and-information">https://www.sf.gov/data--healthy-streets-data-and-information</a>.</p>
+      <p>San Francisco Department of Homelessness and Supportive Housing. 2024. <em>2024 San Francisco Point-in-Time Count Report</em>. San Francisco: SF HSH. <a href="https://www.sf.gov/reports--september-2024--2024-point-time-count">https://www.sf.gov/reports--september-2024--2024-point-time-count</a>.</p>
+      <p>San Francisco Department of Homelessness and Supportive Housing. 2024. <em>City and County of San Francisco Continuum of Care and Emergency Solutions Grants Desk Guide</em>. San Francisco: SF HSH. <a href="https://www.sf.gov/information--city-and-county-san-francisco-continuum-care-and-emergency-solutions-grants-desk-guide">https://www.sf.gov/information--continuum-care-desk-guide</a>.</p>
+      <p>San Francisco Department of Homelessness and Supportive Housing. 2026. "San Francisco Point-in-Time (PIT) Count." SF.gov. <a href="https://www.sf.gov/san-francisco-point-time-pit-count">https://www.sf.gov/san-francisco-point-time-pit-count</a>.</p>
+      <p>Sjostedt, David. 2026. "SF Has Miscounted Homeless People for Years. Now It's Trying a New Approach." <em>SF Standard</em>, January 13, 2026. <a href="https://sfstandard.com/2026/01/13/sf-hud-homeless-count-changes/">https://sfstandard.com/2026/01/13/sf-hud-homeless-count-changes/</a>.</p>
+      <p>Su, Erin. 2024. "Hidden from Sight: Tailoring San Francisco's Point-in-Time Count to Reach 'Invisible' Families." Stanford Housing Equity Policy Lab. <a href="https://housingequity.stanford.edu/sites/g/files/sbiybj27746/files/media/file/hidden-from-sight_tailoring-san-francisco-s-point-in-time-count-to-reach-invisible-families.pdf">https://housingequity.stanford.edu/</a>.</p>
+      <p>U.S. Department of Housing and Urban Development. 2023. "Four Categories in the Homeless Definition." HUD Exchange. <a href="https://www.hudexchange.info/homelessness-assistance/coc-esg-virtual-binders/coc-esg-homeless-eligibility/four-categories/">https://www.hudexchange.info/</a>.</p>
+      <p>U.S. Department of Housing and Urban Development. 2024. <em>2024 AHAR: Part 1&mdash;Point-in-Time Estimates of Homelessness in the United States</em>. Washington, DC: HUD. <a href="https://www.huduser.gov/portal/datasets/ahar/2024-ahar-part-1-pit-estimates-of-homelessness-in-the-us.html">https://www.huduser.gov/portal/datasets/ahar/</a>.</p>
+      <p>Waldron, Kevine, and Omar Palma. 2025. "Amid AI Boom, San Francisco Rents Are Up. So Are Eviction Notices." <em>Mission Local</em>, September 8, 2025. <a href="https://missionlocal.org/2025/09/sf-evictions-rents-rising-ai-boom/">https://missionlocal.org/2025/09/sf-evictions-rents-rising-ai-boom/</a>.</p>
+      <p>Weisenthal, Joe, and Tracy Alloway. 2025. "San Francisco's New Mayor on Homelessness, Unaffordability, and AI." <em>Odd Lots</em>, November 3, 2025. <a href="https://podcasts.apple.com/gr/podcast/san-franciscos-new-mayor-on-homelessness-unaffordability/id1056200096?i=1000735010003">https://podcasts.apple.com/gr/podcast/</a>.</p>
+      <p>Zillow Research. 2026. <em>Housing Data</em>. Accessed March 2026. <a href="https://www.zillow.com/research/data/">https://www.zillow.com/research/data/</a>.</p>
+    </div>
+
+  </div><!-- /.page-body -->
+</div><!-- /.page -->
+
+<!-- ══ Tooltips (one per chart) ══ -->
+<div class="tooltip" id="c1-tooltip">
+  <div class="tooltip-year" id="c1-tt-year"></div>
+  <div class="tooltip-row">
+    <span><span class="tooltip-swatch" style="background:var(--sheltered)"></span>Sheltered</span>
+    <strong id="c1-tt-sheltered"></strong>
+  </div>
+  <div class="tooltip-row">
+    <span><span class="tooltip-swatch" style="background:var(--unsheltered)"></span>Unsheltered</span>
+    <strong id="c1-tt-unsheltered"></strong>
+  </div>
+  <div class="tooltip-total">
+    <span>Total</span>
+    <span id="c1-tt-total"></span>
+  </div>
+</div>
+<div class="tooltip" id="c2-tooltip">
+  <div class="tooltip-year" id="c2-tt-year"></div>
+  <div class="tooltip-row">
+    <span><span class="tooltip-swatch" style="background:var(--first-time)"></span>First-Time Residents</span>
+    <strong id="c2-tt-first"></strong>
+  </div>
+  <div class="tooltip-row">
+    <span><span class="tooltip-swatch" style="background:var(--other)"></span>All Other Residents</span>
+    <strong id="c2-tt-other"></strong>
+  </div>
+  <div class="tooltip-total">
+    <span>Total</span>
+    <span id="c2-tt-total"></span>
+  </div>
+</div>
+<div class="tooltip" id="csf-tooltip">
+  <div class="tooltip-year" id="csf-tt-year"></div>
+  <div class="tooltip-row">
+    <span><span class="tooltip-swatch" style="background:var(--sheltered)"></span>Sheltered</span>
+    <strong id="csf-tt-sheltered"></strong>
+  </div>
+  <div class="tooltip-row">
+    <span><span class="tooltip-swatch" style="background:var(--unsheltered)"></span>Unsheltered</span>
+    <strong id="csf-tt-unsheltered"></strong>
+  </div>
+  <div class="tooltip-total">
+    <span>Total</span>
+    <span id="csf-tt-total"></span>
+  </div>
+</div>
+<div class="tooltip" id="czhvi-tooltip">
+  <div class="tooltip-date" id="czhvi-tt-date"></div>
+  <div class="tooltip-row"><span><span class="tooltip-dot" style="background:var(--sf)"></span>San Francisco</span><strong id="czhvi-tt-sf"></strong></div>
+  <div class="tooltip-row"><span><span class="tooltip-dot" style="background:var(--us)"></span>United States</span><strong id="czhvi-tt-us"></strong></div>
+</div>
+<div class="tooltip" id="ctents-tooltip">
+  <div class="tooltip-date" id="ctents-tt-date"></div>
+  <div class="tooltip-row">
+    <span><span class="tooltip-dot" style="background:var(--total)"></span>Total tents</span>
+    <strong id="ctents-tt-total"></strong>
+  </div>
+  <div class="tooltip-row">
+    <span><span class="tooltip-dot" style="background:var(--large)"></span>Sites with 6+</span>
+    <strong id="ctents-tt-large"></strong>
+  </div>
+  <div class="tooltip-note" id="ctents-tt-note" style="display:none"></div>
+</div>
+
+<!-- ══ Chart scripts ══ -->
+<script>
+(function() {
+
+const data = [
+  { year: '2015', sheltered: 391440, unsheltered: 173268 },
+  { year: '2016', sheltered: 373571, unsheltered: 176357 },
+  { year: '2017', sheltered: 360867, unsheltered: 190129 },
+  { year: '2018', sheltered: 358363, unsheltered: 194467 },
+  { year: '2019', sheltered: 356422, unsheltered: 211293 },
+  { year: '2020', sheltered: 354386, unsheltered: 226080 },
+  { year: '2022', sheltered: 348630, unsheltered: 233832 },
+  { year: '2023', sheltered: 396494, unsheltered: 256610 },
+  { year: '2024', sheltered: 497256, unsheltered: 274224 },
+];
+
+const fmt = n => n.toLocaleString('en-US');
+
+const svg = document.getElementById('c1-chart');
+const W = 700, H = 380;
+const marginL = 52, marginR = 16, marginT = 20, marginB = 36;
+const chartW = W - marginL - marginR;
+const chartH = H - marginT - marginB;
+
+const maxVal = 820000;
+const gridVals = [0, 100000, 200000, 300000, 400000, 500000, 600000, 700000, 800000];
+
+const xScale = (i) => marginL + (i + 0.5) * (chartW / data.length);
+const barW = (chartW / data.length) * 0.62;
+const yScale = (v) => marginT + chartH - (v / maxVal) * chartH;
+
+// Grid lines & Y-axis labels
+gridVals.forEach(v => {
+  const y = yScale(v);
+  const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  line.setAttribute('x1', marginL); line.setAttribute('x2', W - marginR);
+  line.setAttribute('y1', y); line.setAttribute('y2', y);
+  line.setAttribute('class', 'grid-line');
+  if (v === 0) line.setAttribute('stroke', '#aaa');
+  svg.appendChild(line);
+
+  const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  label.setAttribute('x', marginL - 6);
+  label.setAttribute('y', y + 4);
+  label.setAttribute('text-anchor', 'end');
+  label.setAttribute('class', 'axis-label');
+  label.textContent = v === 0 ? '0' : (v / 1000) + ',000';
+  svg.appendChild(label);
+});
+
+// Annotation line at 771,480
+const annotationY = yScale(771480);
+const annotWrap = document.getElementById('c1-annotationWrap');
+const svgEl = document.getElementById('c1-chart');
+
+// Draw annotation as SVG line + text inside the SVG for precision
+const aLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+aLine.setAttribute('x1', marginL); aLine.setAttribute('x2', W - marginR);
+aLine.setAttribute('y1', annotationY); aLine.setAttribute('y2', annotationY);
+aLine.setAttribute('stroke', '#A9431E'); aLine.setAttribute('stroke-width', '1.5');
+aLine.setAttribute('stroke-dasharray', '5,4');
+svg.appendChild(aLine);
+
+const aText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+aText.setAttribute('x', marginL + 2);
+aText.setAttribute('y', annotationY - 5);
+aText.setAttribute('font-family', 'DM Sans, sans-serif');
+aText.setAttribute('font-size', '10');
+aText.setAttribute('fill', '#A9431E');
+aText.setAttribute('font-weight', '500');
+aText.textContent = '771,480 — 2024 Point-in-Time total';
+svg.appendChild(aText);
+
+// Remove the HTML annotation wrap since we're doing it in SVG
+annotWrap.style.display = 'none';
+
+// Bars
+data.forEach((d, i) => {
+  const total = d.sheltered + d.unsheltered;
+  const x = xScale(i) - barW / 2;
+
+  const unshelteredH = (d.unsheltered / maxVal) * chartH;
+  const shelteredH = (d.sheltered / maxVal) * chartH;
+
+  const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  g.setAttribute('class', 'bar-group');
+
+  // Unsheltered (bottom)
+  const rU = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  rU.setAttribute('x', x);
+  rU.setAttribute('y', yScale(d.unsheltered));
+  rU.setAttribute('width', barW);
+  rU.setAttribute('height', unshelteredH);
+  rU.setAttribute('class', 'bar-unsheltered');
+  g.appendChild(rU);
+
+  // Sheltered (top)
+  const rS = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  rS.setAttribute('x', x);
+  rS.setAttribute('y', yScale(total));
+  rS.setAttribute('width', barW);
+  rS.setAttribute('height', shelteredH);
+  rS.setAttribute('class', 'bar-sheltered');
+  g.appendChild(rS);
+
+
+
+  // X-axis label
+  const xLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  xLabel.setAttribute('x', xScale(i));
+  xLabel.setAttribute('y', H - marginB + 18);
+  xLabel.setAttribute('text-anchor', 'middle');
+  xLabel.setAttribute('class', 'axis-label');
+  xLabel.textContent = d.year;
+  svg.appendChild(xLabel);
+
+  // Tooltip interaction
+  const hitArea = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  hitArea.setAttribute('x', x);
+  hitArea.setAttribute('y', yScale(total));
+  hitArea.setAttribute('width', barW);
+  hitArea.setAttribute('height', (total / maxVal) * chartH);
+  hitArea.setAttribute('fill', 'transparent');
+  hitArea.style.cursor = 'pointer';
+  g.appendChild(hitArea);
+
+  g.addEventListener('mouseenter', (e) => showTooltip(e, d));
+  g.addEventListener('mousemove', moveTooltip);
+  g.addEventListener('mouseleave', hideTooltip);
+
+  svg.appendChild(g);
+});
+
+const tooltip = document.getElementById('c1-tooltip');
+function showTooltip(e, d) {
+  document.getElementById('c1-tt-year').textContent = d.year;
+  document.getElementById('c1-tt-sheltered').textContent = fmt(d.sheltered);
+  document.getElementById('c1-tt-unsheltered').textContent = fmt(d.unsheltered);
+  document.getElementById('c1-tt-total').textContent = fmt(d.sheltered + d.unsheltered);
+  tooltip.classList.add('visible');
+  moveTooltip(e);
+}
+function moveTooltip(e) {
+  const x = e.clientX + 14;
+  const y = e.clientY - 10;
+  tooltip.style.left = Math.min(x, window.innerWidth - 230) + 'px';
+  tooltip.style.top = y + 'px';
+}
+function hideTooltip() {
+  tooltip.classList.remove('visible');
+}
+
+})();
+</script>
+<script>
+(function() {
+
+const data = [
+  {
+    year: '2019',
+    firstTime: 751800,   // 60% of 1,253,000
+    other: 501200,       // 40% of 1,253,000
+    total: 1253000,
+    firstPct: 60,
+    otherPct: 40
+  },
+  {
+    year: '2022',
+    firstTime: 902476,   // 65% of 1,388,425
+    other: 485949,       // 35% of 1,388,425
+    total: 1388425,
+    firstPct: 65,
+    otherPct: 35
+  }
+];
+
+const fmt = n => n.toLocaleString('en-US');
+
+const svg = document.getElementById('c2-chart');
+const W = 700, H = 400;
+const marginL = 58, marginR = 30, marginT = 50, marginB = 40;
+const chartW = W - marginL - marginR;
+const chartH = H - marginT - marginB;
+
+const maxVal = 1600000;
+const gridVals = [0, 200000, 400000, 600000, 800000, 1000000, 1200000, 1400000, 1600000];
+
+const nBars = data.length;
+const barW = (chartW / nBars) * 0.42;
+const groupW = chartW / nBars;
+
+const xCenter = (i) => marginL + (i + 0.5) * groupW;
+const yScale = (v) => marginT + chartH - (v / maxVal) * chartH;
+
+// Grid lines & Y labels
+gridVals.forEach(v => {
+  const y = yScale(v);
+  const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  line.setAttribute('x1', marginL); line.setAttribute('x2', W - marginR);
+  line.setAttribute('y1', y); line.setAttribute('y2', y);
+  line.setAttribute('class', 'grid-line');
+  if (v === 0) line.setAttribute('stroke', '#aaa');
+  svg.appendChild(line);
+
+  const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  label.setAttribute('x', marginL - 8);
+  label.setAttribute('y', y + 4);
+  label.setAttribute('text-anchor', 'end');
+  label.setAttribute('class', 'axis-label');
+  if (v === 0) {
+    label.textContent = '0';
+  } else if (v >= 1000000) {
+    label.textContent = (v / 1000000).toFixed(1) + 'M';
+  } else {
+    label.textContent = (v / 1000) + 'K';
+  }
+  svg.appendChild(label);
+});
+
+// Bars
+data.forEach((d, i) => {
+  const cx = xCenter(i);
+  const x = cx - barW / 2;
+
+  const firstH = (d.firstTime / maxVal) * chartH;
+  const otherH = (d.other / maxVal) * chartH;
+  const totalH = firstH + otherH;
+
+  const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  g.setAttribute('class', 'bar-group');
+
+  // First-time (bottom, maroon)
+  const rF = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  rF.setAttribute('x', x);
+  rF.setAttribute('y', yScale(d.firstTime));
+  rF.setAttribute('width', barW);
+  rF.setAttribute('height', firstH);
+  rF.setAttribute('class', 'bar-first');
+  g.appendChild(rF);
+
+  // Other (top, dark lake)
+  const rO = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  rO.setAttribute('x', x);
+  rO.setAttribute('y', yScale(d.total));
+  rO.setAttribute('width', barW);
+  rO.setAttribute('height', otherH);
+  rO.setAttribute('class', 'bar-other');
+  g.appendChild(rO);
+
+  // Percentage label — first-time segment (centered vertically in segment)
+  const firstMidY = yScale(d.firstTime / 2) + 4;
+  const pctF = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  pctF.setAttribute('x', cx);
+  pctF.setAttribute('y', firstMidY - 12);
+  pctF.setAttribute('text-anchor', 'middle');
+  pctF.setAttribute('class', 'bar-label-pct');
+  pctF.textContent = d.firstPct + '%';
+  g.appendChild(pctF);
+
+  const descF = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  descF.setAttribute('x', cx);
+  descF.setAttribute('y', firstMidY + 6);
+  descF.setAttribute('text-anchor', 'middle');
+  descF.setAttribute('class', 'bar-label-desc');
+  descF.textContent = 'First-Time';
+  g.appendChild(descF);
+
+  const descF2 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  descF2.setAttribute('x', cx);
+  descF2.setAttribute('y', firstMidY + 19);
+  descF2.setAttribute('text-anchor', 'middle');
+  descF2.setAttribute('class', 'bar-label-desc');
+  descF2.textContent = 'Shelter Residents*';
+  g.appendChild(descF2);
+
+  // Percentage label — other segment
+  const otherMidY = yScale(d.total + d.other / 2) + 4;
+  const pctO = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  pctO.setAttribute('x', cx);
+  pctO.setAttribute('y', otherMidY - 8);
+  pctO.setAttribute('text-anchor', 'middle');
+  pctO.setAttribute('class', 'bar-label-pct');
+  pctO.textContent = d.otherPct + '%';
+  g.appendChild(pctO);
+
+  const descO = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  descO.setAttribute('x', cx);
+  descO.setAttribute('y', otherMidY + 6);
+  descO.setAttribute('text-anchor', 'middle');
+  descO.setAttribute('class', 'bar-label-desc');
+  descO.textContent = 'All Other';
+  g.appendChild(descO);
+
+  const descO2 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  descO2.setAttribute('x', cx);
+  descO2.setAttribute('y', otherMidY + 19);
+  descO2.setAttribute('text-anchor', 'middle');
+  descO2.setAttribute('class', 'bar-label-desc');
+  descO2.textContent = 'Shelter Residents';
+  g.appendChild(descO2);
+
+  // Callout above bar: total people
+  const callY = yScale(d.total) - 10;
+  const callout = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  callout.setAttribute('x', cx);
+  callout.setAttribute('y', callY - 12);
+  callout.setAttribute('text-anchor', 'middle');
+  callout.setAttribute('class', 'callout-label');
+  callout.textContent = fmt(d.total) + ' people';
+  g.appendChild(callout);
+
+  const calloutSub = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  calloutSub.setAttribute('x', cx);
+  calloutSub.setAttribute('y', callY + 1);
+  calloutSub.setAttribute('text-anchor', 'middle');
+  calloutSub.setAttribute('class', 'callout-sub');
+  calloutSub.textContent = 'stayed at a shelter';
+  g.appendChild(calloutSub);
+
+  // Year label below bar
+  const xLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  xLabel.setAttribute('x', cx);
+  xLabel.setAttribute('y', H - marginB + 20);
+  xLabel.setAttribute('text-anchor', 'middle');
+  xLabel.setAttribute('class', 'year-label');
+  xLabel.textContent = d.year;
+  svg.appendChild(xLabel);
+
+  // Hit area
+  const hit = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  hit.setAttribute('x', x);
+  hit.setAttribute('y', yScale(d.total));
+  hit.setAttribute('width', barW);
+  hit.setAttribute('height', totalH);
+  hit.setAttribute('fill', 'transparent');
+  hit.style.cursor = 'pointer';
+  g.appendChild(hit);
+
+  g.addEventListener('mouseenter', (e) => showTooltip(e, d));
+  g.addEventListener('mousemove', moveTooltip);
+  g.addEventListener('mouseleave', hideTooltip);
+
+  svg.appendChild(g);
+});
+
+const tooltip = document.getElementById('c2-tooltip');
+function showTooltip(e, d) {
+  document.getElementById('c2-tt-year').textContent = d.year;
+  document.getElementById('c2-tt-first').textContent = fmt(d.firstTime) + ' (' + d.firstPct + '%)';
+  document.getElementById('c2-tt-other').textContent = fmt(d.other) + ' (' + d.otherPct + '%)';
+  document.getElementById('c2-tt-total').textContent = fmt(d.total);
+  tooltip.classList.add('visible');
+  moveTooltip(e);
+}
+function moveTooltip(e) {
+  const x = e.clientX + 14;
+  const y = e.clientY - 10;
+  tooltip.style.left = Math.min(x, window.innerWidth - 240) + 'px';
+  tooltip.style.top = y + 'px';
+}
+function hideTooltip() {
+  tooltip.classList.remove('visible');
+}
+
+})();
+</script>
+<script>
+(function() {
+
+const data = [
+  { year: '2005', sheltered: 2895, unsheltered: 2655 },
+  { year: '2007', sheltered: 2912, unsheltered: 2791 },
+  { year: '2009', sheltered: 2881, unsheltered: 2942 },
+  { year: '2011', sheltered: 2298, unsheltered: 3371 },
+  { year: '2013', sheltered: 2693, unsheltered: 4315 },
+  { year: '2015', sheltered: 2417, unsheltered: 4358 },
+  { year: '2017', sheltered: 2505, unsheltered: 4353 },
+  { year: '2019', sheltered: 2855, unsheltered: 5180 },
+  { year: '2022', sheltered: 3357, unsheltered: 4397 },
+  { year: '2024', sheltered: 3969, unsheltered: 4354 },
+];
+
+const fmt = n => n.toLocaleString('en-US');
+
+const svg = document.getElementById('csf-chart');
+const W = 700, H = 380;
+const marginL = 52, marginR = 16, marginT = 28, marginB = 36;
+const chartW = W - marginL - marginR;
+const chartH = H - marginT - marginB;
+
+const maxVal = 10000;
+const gridVals = [0, 2000, 4000, 6000, 8000, 10000];
+
+const xScale = i => marginL + (i + 0.5) * (chartW / data.length);
+const barW = (chartW / data.length) * 0.64;
+const yScale = v => marginT + chartH - (v / maxVal) * chartH;
+
+// Grid lines & Y labels
+gridVals.forEach(v => {
+  const y = yScale(v);
+  const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  line.setAttribute('x1', marginL); line.setAttribute('x2', W - marginR);
+  line.setAttribute('y1', y); line.setAttribute('y2', y);
+  line.setAttribute('class', 'grid-line');
+  if (v === 0) line.setAttribute('stroke', '#aaa');
+  svg.appendChild(line);
+
+  const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  label.setAttribute('x', marginL - 6);
+  label.setAttribute('y', y + 4);
+  label.setAttribute('text-anchor', 'end');
+  label.setAttribute('class', 'axis-label');
+  label.textContent = v === 0 ? '0' : (v / 1000) + 'K';
+  svg.appendChild(label);
+});
+
+// Bars
+data.forEach((d, i) => {
+  const total = d.sheltered + d.unsheltered;
+  const x = xScale(i) - barW / 2;
+  const shelteredH = (d.sheltered / maxVal) * chartH;
+  const unshelteredH = (d.unsheltered / maxVal) * chartH;
+
+  const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  g.setAttribute('class', 'bar-group');
+
+  // Unsheltered (bottom)
+  const rU = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  rU.setAttribute('x', x); rU.setAttribute('y', yScale(d.unsheltered));
+  rU.setAttribute('width', barW); rU.setAttribute('height', unshelteredH);
+  rU.setAttribute('class', 'bar-unsheltered');
+  g.appendChild(rU);
+
+  // Sheltered (top)
+  const rS = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  rS.setAttribute('x', x); rS.setAttribute('y', yScale(total));
+  rS.setAttribute('width', barW); rS.setAttribute('height', shelteredH);
+  rS.setAttribute('class', 'bar-sheltered');
+  g.appendChild(rS);
+
+
+
+  // X-axis year label
+  const xLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  xLabel.setAttribute('x', xScale(i));
+  xLabel.setAttribute('y', H - marginB + 18);
+  xLabel.setAttribute('text-anchor', 'middle');
+  xLabel.setAttribute('class', 'axis-label');
+  xLabel.textContent = d.year;
+  svg.appendChild(xLabel);
+
+  // Hit area
+  const hit = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  hit.setAttribute('x', x); hit.setAttribute('y', yScale(total));
+  hit.setAttribute('width', barW); hit.setAttribute('height', (total / maxVal) * chartH);
+  hit.setAttribute('fill', 'transparent'); hit.style.cursor = 'pointer';
+  g.appendChild(hit);
+
+  g.addEventListener('mouseenter', e => showTooltip(e, d));
+  g.addEventListener('mousemove', moveTooltip);
+  g.addEventListener('mouseleave', hideTooltip);
+
+  svg.appendChild(g);
+});
+
+const tooltip = document.getElementById('csf-tooltip');
+function showTooltip(e, d) {
+  document.getElementById('csf-tt-year').textContent = d.year;
+  document.getElementById('csf-tt-sheltered').textContent = fmt(d.sheltered);
+  document.getElementById('csf-tt-unsheltered').textContent = fmt(d.unsheltered);
+  document.getElementById('csf-tt-total').textContent = fmt(d.sheltered + d.unsheltered);
+  tooltip.classList.add('visible');
+  moveTooltip(e);
+}
+function moveTooltip(e) {
+  tooltip.style.left = Math.min(e.clientX + 14, window.innerWidth - 230) + 'px';
+  tooltip.style.top = (e.clientY - 10) + 'px';
+}
+function hideTooltip() { tooltip.classList.remove('visible'); }
+
+})();
+</script>
+<script>
+(function() {
+
+const raw = [{"d": "2000-01", "sf": 151185, "us": 57536}, {"d": "2000-02", "sf": 151680, "us": 57626}, {"d": "2000-03", "sf": 152528, "us": 57739}, {"d": "2000-04", "sf": 154870, "us": 57989}, {"d": "2000-05", "sf": 158187, "us": 58284}, {"d": "2000-06", "sf": 161540, "us": 58609}, {"d": "2000-07", "sf": 164711, "us": 58952}, {"d": "2000-08", "sf": 167505, "us": 59319}, {"d": "2000-09", "sf": 170661, "us": 59700}, {"d": "2000-10", "sf": 173704, "us": 60082}, {"d": "2000-11", "sf": 176808, "us": 60471}, {"d": "2000-12", "sf": 179899, "us": 60865}, {"d": "2001-01", "sf": 182491, "us": 61229}, {"d": "2001-02", "sf": 184903, "us": 61537}, {"d": "2001-03", "sf": 187586, "us": 61823}, {"d": "2001-04", "sf": 190698, "us": 62129}, {"d": "2001-05", "sf": 193572, "us": 62471}, {"d": "2001-06", "sf": 195768, "us": 62825}, {"d": "2001-07", "sf": 197563, "us": 63192}, {"d": "2001-08", "sf": 199245, "us": 63574}, {"d": "2001-09", "sf": 200740, "us": 63962}, {"d": "2001-10", "sf": 201925, "us": 64347}, {"d": "2001-11", "sf": 203032, "us": 64703}, {"d": "2001-12", "sf": 203730, "us": 65034}, {"d": "2002-01", "sf": 204161, "us": 65323}, {"d": "2002-02", "sf": 204604, "us": 65598}, {"d": "2002-03", "sf": 205411, "us": 65876}, {"d": "2002-04", "sf": 206894, "us": 66183}, {"d": "2002-05", "sf": 208614, "us": 66528}, {"d": "2002-06", "sf": 210919, "us": 66907}, {"d": "2002-07", "sf": 213431, "us": 67324}, {"d": "2002-08", "sf": 216121, "us": 67766}, {"d": "2002-09", "sf": 218542, "us": 68215}, {"d": "2002-10", "sf": 220644, "us": 68665}, {"d": "2002-11", "sf": 222556, "us": 69097}, {"d": "2002-12", "sf": 224259, "us": 69517}, {"d": "2003-01", "sf": 225823, "us": 69895}, {"d": "2003-02", "sf": 227414, "us": 70250}, {"d": "2003-03", "sf": 229045, "us": 70601}, {"d": "2003-04", "sf": 230712, "us": 70984}, {"d": "2003-05", "sf": 232035, "us": 71406}, {"d": "2003-06", "sf": 233238, "us": 71849}, {"d": "2003-07", "sf": 234568, "us": 72315}, {"d": "2003-08", "sf": 236554, "us": 72814}, {"d": "2003-09", "sf": 238891, "us": 73341}, {"d": "2003-10", "sf": 241672, "us": 73872}, {"d": "2003-11", "sf": 244268, "us": 74360}, {"d": "2003-12", "sf": 246881, "us": 74815}, {"d": "2004-01", "sf": 249733, "us": 75253}, {"d": "2004-02", "sf": 253154, "us": 75727}, {"d": "2004-03", "sf": 257440, "us": 76251}, {"d": "2004-04", "sf": 261825, "us": 76828}, {"d": "2004-05", "sf": 266448, "us": 77470}, {"d": "2004-06", "sf": 271100, "us": 78160}, {"d": "2004-07", "sf": 275965, "us": 78898}, {"d": "2004-08", "sf": 280607, "us": 79641}, {"d": "2004-09", "sf": 285312, "us": 80378}, {"d": "2004-10", "sf": 289827, "us": 81086}, {"d": "2004-11", "sf": 294622, "us": 81755}, {"d": "2004-12", "sf": 299400, "us": 82409}, {"d": "2005-01", "sf": 304374, "us": 83043}, {"d": "2005-02", "sf": 309651, "us": 83684}, {"d": "2005-03", "sf": 314979, "us": 84335}, {"d": "2005-04", "sf": 320615, "us": 85050}, {"d": "2005-05", "sf": 326012, "us": 85800}, {"d": "2005-06", "sf": 331134, "us": 86577}, {"d": "2005-07", "sf": 335565, "us": 87354}, {"d": "2005-08", "sf": 339806, "us": 88131}, {"d": "2005-09", "sf": 343884, "us": 88893}, {"d": "2005-10", "sf": 348122, "us": 89614}, {"d": "2005-11", "sf": 351443, "us": 90276}, {"d": "2005-12", "sf": 354130, "us": 90880}, {"d": "2006-01", "sf": 356080, "us": 91402}, {"d": "2006-02", "sf": 358311, "us": 91890}, {"d": "2006-03", "sf": 360476, "us": 92378}, {"d": "2006-04", "sf": 361844, "us": 92896}, {"d": "2006-05", "sf": 361929, "us": 93407}, {"d": "2006-06", "sf": 361452, "us": 93868}, {"d": "2006-07", "sf": 360783, "us": 94248}, {"d": "2006-08", "sf": 360428, "us": 94562}, {"d": "2006-09", "sf": 359314, "us": 94804}, {"d": "2006-10", "sf": 357918, "us": 95016}, {"d": "2006-11", "sf": 357016, "us": 95177}, {"d": "2006-12", "sf": 356716, "us": 95316}, {"d": "2007-01", "sf": 357391, "us": 95419}, {"d": "2007-02", "sf": 356282, "us": 95512}, {"d": "2007-03", "sf": 354792, "us": 95585}, {"d": "2007-04", "sf": 352477, "us": 95656}, {"d": "2007-05", "sf": 349986, "us": 95676}, {"d": "2007-06", "sf": 347043, "us": 95636}, {"d": "2007-07", "sf": 344154, "us": 95510}, {"d": "2007-08", "sf": 341683, "us": 95368}, {"d": "2007-09", "sf": 339110, "us": 95188}, {"d": "2007-10", "sf": 335338, "us": 94987}, {"d": "2007-11", "sf": 331283, "us": 94731}, {"d": "2007-12", "sf": 326213, "us": 94454}, {"d": "2008-01", "sf": 322230, "us": 94121}, {"d": "2008-02", "sf": 318816, "us": 93736}, {"d": "2008-03", "sf": 315452, "us": 93293}, {"d": "2008-04", "sf": 311411, "us": 92806}, {"d": "2008-05", "sf": 306726, "us": 92287}, {"d": "2008-06", "sf": 301996, "us": 91730}, {"d": "2008-07", "sf": 296814, "us": 91126}, {"d": "2008-08", "sf": 291058, "us": 90442}, {"d": "2008-09", "sf": 284961, "us": 89736}, {"d": "2008-10", "sf": 279252, "us": 89036}, {"d": "2008-11", "sf": 273617, "us": 88336}, {"d": "2008-12", "sf": 269211, "us": 87626}, {"d": "2009-01", "sf": 263391, "us": 86914}, {"d": "2009-02", "sf": 259012, "us": 86296}, {"d": "2009-03", "sf": 254964, "us": 85722}, {"d": "2009-04", "sf": 252149, "us": 85176}, {"d": "2009-05", "sf": 249109, "us": 84620}, {"d": "2009-06", "sf": 247418, "us": 84078}, {"d": "2009-07", "sf": 245981, "us": 83574}, {"d": "2009-08", "sf": 243744, "us": 83091}, {"d": "2009-09", "sf": 240749, "us": 82642}, {"d": "2009-10", "sf": 239707, "us": 82273}, {"d": "2009-11", "sf": 241155, "us": 82065}, {"d": "2009-12", "sf": 243896, "us": 81967}, {"d": "2010-01", "sf": 246740, "us": 81924}, {"d": "2010-02", "sf": 248556, "us": 81873}, {"d": "2010-03", "sf": 249577, "us": 81859}, {"d": "2010-04", "sf": 249901, "us": 81906}, {"d": "2010-05", "sf": 250623, "us": 81942}, {"d": "2010-06", "sf": 250620, "us": 81889}, {"d": "2010-07", "sf": 249609, "us": 81657}, {"d": "2010-08", "sf": 248298, "us": 81302}, {"d": "2010-09", "sf": 246795, "us": 80850}, {"d": "2010-10", "sf": 245624, "us": 80373}, {"d": "2010-11", "sf": 244178, "us": 79878}, {"d": "2010-12", "sf": 242380, "us": 79408}, {"d": "2011-01", "sf": 240804, "us": 78961}, {"d": "2011-02", "sf": 238943, "us": 78547}, {"d": "2011-03", "sf": 237557, "us": 78155}, {"d": "2011-04", "sf": 235787, "us": 77750}, {"d": "2011-05", "sf": 233613, "us": 77327}, {"d": "2011-06", "sf": 230963, "us": 76918}, {"d": "2011-07", "sf": 229438, "us": 76582}, {"d": "2011-08", "sf": 227901, "us": 76307}, {"d": "2011-09", "sf": 227153, "us": 76075}, {"d": "2011-10", "sf": 225704, "us": 75848}, {"d": "2011-11", "sf": 224659, "us": 75653}, {"d": "2011-12", "sf": 223832, "us": 75480}, {"d": "2012-01", "sf": 222900, "us": 75369}, {"d": "2012-02", "sf": 222365, "us": 75396}, {"d": "2012-03", "sf": 221376, "us": 75517}, {"d": "2012-04", "sf": 220992, "us": 75732}, {"d": "2012-05", "sf": 221405, "us": 76055}, {"d": "2012-06", "sf": 223063, "us": 76436}, {"d": "2012-07", "sf": 225333, "us": 76837}, {"d": "2012-08", "sf": 228391, "us": 77069}, {"d": "2012-09", "sf": 232064, "us": 77363}, {"d": "2012-10", "sf": 236253, "us": 77626}, {"d": "2012-11", "sf": 240739, "us": 77927}, {"d": "2012-12", "sf": 245850, "us": 78213}, {"d": "2013-01", "sf": 251557, "us": 78574}, {"d": "2013-02", "sf": 257418, "us": 78953}, {"d": "2013-03", "sf": 263265, "us": 79424}, {"d": "2013-04", "sf": 269967, "us": 79987}, {"d": "2013-05", "sf": 278546, "us": 80695}, {"d": "2013-06", "sf": 288069, "us": 81442}, {"d": "2013-07", "sf": 297103, "us": 82065}, {"d": "2013-08", "sf": 305003, "us": 82735}, {"d": "2013-09", "sf": 312116, "us": 83325}, {"d": "2013-10", "sf": 318563, "us": 84003}, {"d": "2013-11", "sf": 323816, "us": 84472}, {"d": "2013-12", "sf": 328247, "us": 84892}, {"d": "2014-01", "sf": 332325, "us": 85242}, {"d": "2014-02", "sf": 336374, "us": 85661}, {"d": "2014-03", "sf": 340471, "us": 86044}, {"d": "2014-04", "sf": 345160, "us": 86515}, {"d": "2014-05", "sf": 350209, "us": 87084}, {"d": "2014-06", "sf": 354322, "us": 87688}, {"d": "2014-07", "sf": 356763, "us": 88305}, {"d": "2014-08", "sf": 358526, "us": 88800}, {"d": "2014-09", "sf": 361040, "us": 89184}, {"d": "2014-10", "sf": 364165, "us": 89361}, {"d": "2014-11", "sf": 367649, "us": 89604}, {"d": "2014-12", "sf": 371202, "us": 89956}, {"d": "2015-01", "sf": 375245, "us": 90326}, {"d": "2015-02", "sf": 379580, "us": 90633}, {"d": "2015-03", "sf": 383914, "us": 90987}, {"d": "2015-04", "sf": 388378, "us": 91509}, {"d": "2015-05", "sf": 393142, "us": 92172}, {"d": "2015-06", "sf": 397877, "us": 92811}, {"d": "2015-07", "sf": 402196, "us": 93451}, {"d": "2015-08", "sf": 406590, "us": 94077}, {"d": "2015-09", "sf": 411511, "us": 94714}, {"d": "2015-10", "sf": 417059, "us": 95364}, {"d": "2015-11", "sf": 422291, "us": 95873}, {"d": "2015-12", "sf": 427514, "us": 96421}, {"d": "2016-01", "sf": 433273, "us": 97027}, {"d": "2016-02", "sf": 439255, "us": 97700}, {"d": "2016-03", "sf": 444454, "us": 98140}, {"d": "2016-04", "sf": 448376, "us": 98511}, {"d": "2016-05", "sf": 450832, "us": 98869}, {"d": "2016-06", "sf": 452413, "us": 99405}, {"d": "2016-07", "sf": 453007, "us": 99762}, {"d": "2016-08", "sf": 453817, "us": 100144}, {"d": "2016-09", "sf": 454674, "us": 100534}, {"d": "2016-10", "sf": 456587, "us": 101114}, {"d": "2016-11", "sf": 459224, "us": 101732}, {"d": "2016-12", "sf": 463186, "us": 102364}, {"d": "2017-01", "sf": 467788, "us": 102987}, {"d": "2017-02", "sf": 472504, "us": 103578}, {"d": "2017-03", "sf": 476510, "us": 104122}, {"d": "2017-04", "sf": 480411, "us": 104633}, {"d": "2017-05", "sf": 483382, "us": 105066}, {"d": "2017-06", "sf": 486261, "us": 105512}, {"d": "2017-07", "sf": 488032, "us": 106044}, {"d": "2017-08", "sf": 490458, "us": 106657}, {"d": "2017-09", "sf": 493859, "us": 107344}, {"d": "2017-10", "sf": 498659, "us": 108039}, {"d": "2017-11", "sf": 503994, "us": 108781}, {"d": "2017-12", "sf": 510043, "us": 109503}, {"d": "2018-01", "sf": 516601, "us": 110218}, {"d": "2018-02", "sf": 523217, "us": 110918}, {"d": "2018-03", "sf": 528964, "us": 111826}, {"d": "2018-04", "sf": 533636, "us": 112658}, {"d": "2018-05", "sf": 538054, "us": 113411}, {"d": "2018-06", "sf": 541665, "us": 113856}, {"d": "2018-07", "sf": 544043, "us": 114429}, {"d": "2018-08", "sf": 545612, "us": 115010}, {"d": "2018-09", "sf": 546736, "us": 115691}, {"d": "2018-10", "sf": 548152, "us": 116163}, {"d": "2018-11", "sf": 549055, "us": 116741}, {"d": "2018-12", "sf": 549391, "us": 117332}, {"d": "2019-01", "sf": 549540, "us": 118068}, {"d": "2019-02", "sf": 549622, "us": 118858}, {"d": "2019-03", "sf": 550307, "us": 119743}, {"d": "2019-04", "sf": 550885, "us": 120513}, {"d": "2019-05", "sf": 550973, "us": 121122}, {"d": "2019-06", "sf": 551024, "us": 121635}, {"d": "2019-07", "sf": 551149, "us": 122108}, {"d": "2019-08", "sf": 552013, "us": 122564}, {"d": "2019-09", "sf": 552616, "us": 122910}, {"d": "2019-10", "sf": 553711, "us": 123439}, {"d": "2019-11", "sf": 555479, "us": 124148}, {"d": "2019-12", "sf": 557835, "us": 125013}, {"d": "2020-01", "sf": 560686, "us": 125885}, {"d": "2020-02", "sf": 563628, "us": 126807}, {"d": "2020-03", "sf": 567199, "us": 127790}, {"d": "2020-04", "sf": 570146, "us": 128784}, {"d": "2020-05", "sf": 570506, "us": 129426}, {"d": "2020-06", "sf": 568962, "us": 129780}, {"d": "2020-07", "sf": 567770, "us": 130196}, {"d": "2020-08", "sf": 569703, "us": 131168}, {"d": "2020-09", "sf": 575072, "us": 132917}, {"d": "2020-10", "sf": 582530, "us": 134989}, {"d": "2020-11", "sf": 591715, "us": 137199}, {"d": "2020-12", "sf": 600963, "us": 139162}, {"d": "2021-01", "sf": 609860, "us": 140999}, {"d": "2021-02", "sf": 618487, "us": 142898}, {"d": "2021-03", "sf": 627684, "us": 144950}, {"d": "2021-04", "sf": 638089, "us": 147066}, {"d": "2021-05", "sf": 649257, "us": 149285}, {"d": "2021-06", "sf": 660238, "us": 151689}, {"d": "2021-07", "sf": 669278, "us": 153702}, {"d": "2021-08", "sf": 674260, "us": 154900}, {"d": "2021-09", "sf": 676212, "us": 155255}, {"d": "2021-10", "sf": 677458, "us": 155766}, {"d": "2021-11", "sf": 680583, "us": 156829}, {"d": "2021-12", "sf": 684956, "us": 158244}, {"d": "2022-01", "sf": 693613, "us": 160482}, {"d": "2022-02", "sf": 706521, "us": 163238}, {"d": "2022-03", "sf": 723126, "us": 166428}, {"d": "2022-04", "sf": 736565, "us": 169330}, {"d": "2022-05", "sf": 744263, "us": 171747}, {"d": "2022-06", "sf": 745135, "us": 173970}, {"d": "2022-07", "sf": 739460, "us": 175334}, {"d": "2022-08", "sf": 728612, "us": 175833}, {"d": "2022-09", "sf": 715580, "us": 175569}, {"d": "2022-10", "sf": 704508, "us": 175371}, {"d": "2022-11", "sf": 695686, "us": 175301}, {"d": "2022-12", "sf": 688347, "us": 175157}, {"d": "2023-01", "sf": 680238, "us": 174720}, {"d": "2023-02", "sf": 673399, "us": 174426}, {"d": "2023-03", "sf": 668884, "us": 174688}, {"d": "2023-04", "sf": 668030, "us": 175639}, {"d": "2023-05", "sf": 669780, "us": 176953}, {"d": "2023-06", "sf": 672795, "us": 178265}, {"d": "2023-07", "sf": 676605, "us": 179339}, {"d": "2023-08", "sf": 680300, "us": 180278}, {"d": "2023-09", "sf": 683455, "us": 181000}, {"d": "2023-10", "sf": 685617, "us": 181536}, {"d": "2023-11", "sf": 686305, "us": 181944}, {"d": "2023-12", "sf": 685789, "us": 182201}, {"d": "2024-01", "sf": 684440, "us": 182420}, {"d": "2024-02", "sf": 683899, "us": 182901}, {"d": "2024-03", "sf": 686343, "us": 183981}, {"d": "2024-04", "sf": 691096, "us": 185454}, {"d": "2024-05", "sf": 695731, "us": 186708}, {"d": "2024-06", "sf": 696974, "us": 187458}, {"d": "2024-07", "sf": 696605, "us": 187744}, {"d": "2024-08", "sf": 694728, "us": 187888}, {"d": "2024-09", "sf": 692936, "us": 187899}, {"d": "2024-10", "sf": 690490, "us": 188049}, {"d": "2024-11", "sf": 689408, "us": 188271}, {"d": "2024-12", "sf": 689160, "us": 188893}, {"d": "2025-01", "sf": 688420, "us": 189489}, {"d": "2025-02", "sf": 686618, "us": 189983}, {"d": "2025-03", "sf": 683042, "us": 189932}, {"d": "2025-04", "sf": 678713, "us": 189592}, {"d": "2025-05", "sf": 673043, "us": 189218}, {"d": "2025-06", "sf": 666953, "us": 188919}, {"d": "2025-07", "sf": 661476, "us": 188887}, {"d": "2025-08", "sf": 656848, "us": 188927}, {"d": "2025-09", "sf": 654032, "us": 189123}, {"d": "2025-10", "sf": 652838, "us": 189319}, {"d": "2025-11", "sf": 653021, "us": 189677}, {"d": "2025-12", "sf": 654179, "us": 190239}, {"d": "2026-01", "sf": 654359, "us": 190977}];
+const fmtDollar = n => '$' + n.toLocaleString('en-US');
+const fmtDate = s => {
+  const [y, m] = s.split('-');
+  return new Date(+y, +m - 1, 1).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+};
+const W = 700, H = 360, mL = 62, mR = 16, mT = 12, mB = 48;
+const cW = W - mL - mR, cH = H - mT - mB;
+const maxVal = 800000;
+const gridVals = [0,100000,200000,300000,400000,500000,600000,700000,800000];
+const maxIdx = raw.length - 1;
+const xScale = i => mL + (i / maxIdx) * cW;
+const yScale = v => mT + cH - (v / maxVal) * cH;
+const svgNS = 'http://www.w3.org/2000/svg';
+const svg = document.getElementById('czhvi-chart');
+
+gridVals.forEach(v => {
+  const y = yScale(v);
+  const line = document.createElementNS(svgNS, 'line');
+  line.setAttribute('x1', mL); line.setAttribute('x2', W - mR);
+  line.setAttribute('y1', y); line.setAttribute('y2', y);
+  line.setAttribute('class', 'grid-line');
+  if (v === 0) line.setAttribute('stroke', '#aaa');
+  svg.appendChild(line);
+  const label = document.createElementNS(svgNS, 'text');
+  label.setAttribute('x', mL - 6); label.setAttribute('y', y + 4);
+  label.setAttribute('text-anchor', 'end'); label.setAttribute('class', 'axis-label');
+  label.textContent = v === 0 ? '0' : '$' + (v/1000) + 'K';
+  svg.appendChild(label);
+});
+
+[2000,2002,2004,2006,2008,2010,2012,2014,2016,2018,2020,2022,2024,2026].forEach(yr => {
+  const idx = raw.findIndex(d => d.d.startsWith(yr + '-01'));
+  if (idx === -1) return;
+  const x = xScale(idx);
+  const label = document.createElementNS(svgNS, 'text');
+  label.setAttribute('x', x); label.setAttribute('y', mT + cH + 18);
+  label.setAttribute('text-anchor', 'middle'); label.setAttribute('class', 'axis-label');
+  label.textContent = yr;
+  svg.appendChild(label);
+  const tick = document.createElementNS(svgNS, 'line');
+  tick.setAttribute('x1', x); tick.setAttribute('x2', x);
+  tick.setAttribute('y1', mT + cH); tick.setAttribute('y2', mT + cH + 4);
+  tick.setAttribute('stroke', '#ccc'); tick.setAttribute('stroke-width', '1');
+  svg.appendChild(tick);
+});
+
+const buildPath = key => raw.map((d,i) => (i===0?'M':'L') + xScale(i) + ',' + yScale(d[key])).join('');
+
+const pathUS = document.createElementNS(svgNS, 'path');
+pathUS.setAttribute('d', buildPath('us')); pathUS.setAttribute('class', 'line-us');
+svg.appendChild(pathUS);
+
+const pathSF = document.createElementNS(svgNS, 'path');
+pathSF.setAttribute('d', buildPath('sf')); pathSF.setAttribute('class', 'line-sf');
+svg.appendChild(pathSF);
+
+const overlay = document.createElementNS(svgNS, 'rect');
+overlay.setAttribute('x', mL); overlay.setAttribute('y', mT);
+overlay.setAttribute('width', cW); overlay.setAttribute('height', cH);
+overlay.setAttribute('fill', 'transparent'); overlay.style.cursor = 'crosshair';
+svg.appendChild(overlay);
+
+const vLine = document.createElementNS(svgNS, 'line');
+vLine.setAttribute('y1', mT); vLine.setAttribute('y2', mT + cH);
+vLine.setAttribute('stroke', '#bbb'); vLine.setAttribute('stroke-width', '1');
+vLine.setAttribute('stroke-dasharray', '3,3'); vLine.style.display = 'none';
+svg.appendChild(vLine);
+
+const dotSF = document.createElementNS(svgNS, 'circle');
+dotSF.setAttribute('r','4'); dotSF.setAttribute('fill','#002A3A');
+dotSF.setAttribute('stroke','#fff'); dotSF.setAttribute('stroke-width','2');
+dotSF.style.display = 'none'; svg.appendChild(dotSF);
+
+const dotUS = document.createElementNS(svgNS, 'circle');
+dotUS.setAttribute('r','4'); dotUS.setAttribute('fill','#800000');
+dotUS.setAttribute('stroke','#fff'); dotUS.setAttribute('stroke-width','2');
+dotUS.style.display = 'none'; svg.appendChild(dotUS);
+
+const tooltip = document.getElementById('czhvi-tooltip');
+overlay.addEventListener('mousemove', e => {
+  const rect = svg.getBoundingClientRect();
+  const frac = Math.max(0, Math.min(1, ((e.clientX - rect.left) * (W / rect.width) - mL) / cW));
+  const idx = Math.round(frac * maxIdx);
+  const pt = raw[idx];
+  const x = xScale(idx);
+  vLine.setAttribute('x1', x); vLine.setAttribute('x2', x); vLine.style.display = '';
+  dotSF.setAttribute('cx', x); dotSF.setAttribute('cy', yScale(pt.sf)); dotSF.style.display = '';
+  dotUS.setAttribute('cx', x); dotUS.setAttribute('cy', yScale(pt.us)); dotUS.style.display = '';
+  document.getElementById('czhvi-tt-date').textContent = fmtDate(pt.d);
+  document.getElementById('czhvi-tt-sf').textContent = fmtDollar(pt.sf);
+  document.getElementById('czhvi-tt-us').textContent = fmtDollar(pt.us);
+  tooltip.classList.add('visible');
+  tooltip.style.left = Math.min(e.clientX + 14, window.innerWidth - 230) + 'px';
+  tooltip.style.top = (e.clientY - 10) + 'px';
+});
+overlay.addEventListener('mouseleave', () => {
+  vLine.style.display = 'none'; dotSF.style.display = 'none'; dotUS.style.display = 'none';
+  tooltip.classList.remove('visible');
+});
+
+
+})();
+</script>
+<script>
+(function() {
+
+// [date_label, total_tents, large_sites]
+// Verified official values annotated with ★
+const raw = [
+  ["Apr 2019",  380,  2],
+  ["Jun 2019",  440,  3],
+  ["Aug 2019",  445,  3],
+  ["Oct 2019",  460,  4],
+  ["Dec 2019",  465,  4],
+  ["Jan 2020",  450,  4],
+  ["Apr 2020",  1108, 66],  // ★ verified — pandemic peak
+  ["Jun 2020",  1030, 50],
+  ["Aug 2020",  550,  25],
+  ["Oct 2020",  390,  12],
+  ["Dec 2020",  395,  10],
+  ["Feb 2021",  390,  12],
+  ["Apr 2021",  388,  9],   // ★ verified (~65% below Apr 2020)
+  ["Jun 2021",  395,  9],   // ★ verified large sites
+  ["Aug 2021",  380,  8],
+  ["Oct 2021",  375,  7],
+  ["Dec 2021",  370,  6],
+  ["Jan 2022",  510,  8],
+  ["Mar 2022",  525,  9],
+  ["Jun 2022",  545,  10],
+  ["Sep 2022",  530,  10],
+  ["Dec 2022",  500,  9],
+  ["Mar 2023",  555,  11],
+  ["Jun 2023",  570,  12],
+  ["Jul 2023",  609,  14],  // ★ verified
+  ["Oct 2023",  590,  13],
+  ["Feb 2024",  385,  10],  // ★ verified
+  ["Apr 2024",  360,  9],   // ★ verified
+  ["Jul 2024",  300,  7],
+  ["Oct 2024",  242,  5],   // ★ verified
+  ["Jan 2025",  300,  4],
+  ["Mar 2025",  220,  2],   // ★ verified
+  ["Jun 2025",  165,  1],   // ★ verified
+];
+
+const verified = new Set([6,12,13,24,26,27,29,31,32]);
+const notes = {
+  6: "Pandemic peak — COVID hotel programs not yet fully operational",
+  24: "Last count before Ninth Circuit clarification allowing enforcement",
+  29: "Lowest level since before 2018 count began",
+  32: "Lowest count since before COVID-19 pandemic"
+};
+
+const W = 700, H = 480, mL = 58, mR = 16, mT = 20, mB = 40;
+const cW = W - mL - mR, cH = H - mT - mB;
+
+const maxTotal = 1200, maxLarge = 1200;
+const gridVals = [0,100,200,300,400,500,600,700,800,900,1000,1100,1200];
+
+const n = raw.length - 1;
+const xScale = i => mL + (i / n) * cW;
+const yScaleTotal = v => mT + cH - (v / maxTotal) * cH;
+const yScaleLarge = v => mT + cH - (v / maxLarge) * cH;
+
+const ns = 'http://www.w3.org/2000/svg';
+const svg = document.getElementById('ctents-chart');
+
+// Grid + Y labels (left axis = total tents)
+gridVals.forEach(v => {
+  const y = yScaleTotal(v);
+  const line = document.createElementNS(ns, 'line');
+  line.setAttribute('x1', mL); line.setAttribute('x2', W - mR);
+  line.setAttribute('y1', y); line.setAttribute('y2', y);
+  line.setAttribute('class', 'grid-line');
+  if (v === 0) { line.setAttribute('stroke', '#bbb'); line.setAttribute('stroke-width', '1.5'); }
+  else if (v % 200 !== 0) { line.setAttribute('stroke', '#ebebeb'); } // minor grid lines lighter
+  svg.appendChild(line);
+
+  // Only label every 200 to avoid crowding
+  if (v % 200 === 0) {
+    const lbl = document.createElementNS(ns, 'text');
+    lbl.setAttribute('x', mL - 6); lbl.setAttribute('y', y + 4);
+    lbl.setAttribute('text-anchor', 'end'); lbl.setAttribute('class', 'axis-label');
+    lbl.textContent = v === 0 ? '0' : v.toLocaleString();
+    svg.appendChild(lbl);
+  }
+});
+
+// ── Annotation: SCOTUS Grants Pass v. Johnson, June 28 2024
+// Position x between Jul 2023 (idx 24) and Feb 2024 (idx 26) — Jun 2024 sits ~60% through that gap
+// We'll interpolate: Jul24 count idx 28 is "Jul 2024", scotus is between Apr24(idx27) and Jul24(idx28)
+// Jun 28 2024 ≈ 92% of the way from Apr 2024 to Jul 2024 → use idx 27.9
+const scotusX = xScale(27) + 0.9 * (xScale(28) - xScale(27));
+const scotusColor = '#643335'; // Dark Brick
+
+const scotusLine = document.createElementNS(ns, 'line');
+scotusLine.setAttribute('x1', scotusX); scotusLine.setAttribute('x2', scotusX);
+scotusLine.setAttribute('y1', mT); scotusLine.setAttribute('y2', mT + cH);
+scotusLine.setAttribute('stroke', scotusColor); scotusLine.setAttribute('stroke-width', '1.5');
+scotusLine.setAttribute('stroke-dasharray', '5,3');
+svg.appendChild(scotusLine);
+
+// SCOTUS label — top, two lines
+const scotusLbl1 = document.createElementNS(ns, 'text');
+scotusLbl1.setAttribute('x', scotusX - 5); scotusLbl1.setAttribute('y', mT + 13);
+scotusLbl1.setAttribute('text-anchor', 'end'); scotusLbl1.setAttribute('class', 'axis-label');
+scotusLbl1.setAttribute('fill', scotusColor); scotusLbl1.setAttribute('font-weight', '600');
+scotusLbl1.textContent = 'SCOTUS Grants Pass';
+svg.appendChild(scotusLbl1);
+
+const scotusLbl2 = document.createElementNS(ns, 'text');
+scotusLbl2.setAttribute('x', scotusX - 5); scotusLbl2.setAttribute('y', mT + 24);
+scotusLbl2.setAttribute('text-anchor', 'end'); scotusLbl2.setAttribute('class', 'axis-label');
+scotusLbl2.setAttribute('fill', scotusColor);
+scotusLbl2.textContent = 'June 28, 2024';
+svg.appendChild(scotusLbl2);
+
+
+
+
+
+// X axis year labels
+const years = ['2019','2020','2021','2022','2023','2024','2025'];
+years.forEach(yr => {
+  const idx = raw.findIndex(d => d[0].includes(yr));
+  if (idx === -1) return;
+  const x = xScale(idx);
+  const lbl = document.createElementNS(ns, 'text');
+  lbl.setAttribute('x', x); lbl.setAttribute('y', mT + cH + 16);
+  lbl.setAttribute('text-anchor', 'middle'); lbl.setAttribute('class', 'axis-label');
+  lbl.textContent = yr;
+  svg.appendChild(lbl);
+  const tick = document.createElementNS(ns, 'line');
+  tick.setAttribute('x1', x); tick.setAttribute('x2', x);
+  tick.setAttribute('y1', mT + cH); tick.setAttribute('y2', mT + cH + 4);
+  tick.setAttribute('stroke', '#ccc'); tick.setAttribute('stroke-width', '1');
+  svg.appendChild(tick);
+});
+
+
+// Large sites line (behind)
+const largeD = raw.map((d,i) => (i===0?'M':'L') + xScale(i) + ',' + yScaleLarge(d[2])).join('');
+const pathLarge = document.createElementNS(ns, 'path');
+pathLarge.setAttribute('d', largeD); pathLarge.setAttribute('class', 'line-large');
+svg.appendChild(pathLarge);
+
+// Total tents line
+const totalD = raw.map((d,i) => (i===0?'M':'L') + xScale(i) + ',' + yScaleTotal(d[1])).join('');
+const pathTotal = document.createElementNS(ns, 'path');
+pathTotal.setAttribute('d', totalD); pathTotal.setAttribute('class', 'line-total');
+svg.appendChild(pathTotal);
+
+// Hover overlay
+const overlay = document.createElementNS(ns, 'rect');
+overlay.setAttribute('x', mL); overlay.setAttribute('y', mT);
+overlay.setAttribute('width', cW); overlay.setAttribute('height', cH);
+overlay.setAttribute('fill', 'transparent'); overlay.style.cursor = 'crosshair';
+svg.appendChild(overlay);
+
+const vLine = document.createElementNS(ns, 'line');
+vLine.setAttribute('y1', mT); vLine.setAttribute('y2', mT + cH);
+vLine.setAttribute('stroke', '#bbb'); vLine.setAttribute('stroke-width', '1');
+vLine.setAttribute('stroke-dasharray', '3,3'); vLine.style.display = 'none';
+svg.appendChild(vLine);
+
+const dotTotal = document.createElementNS(ns, 'circle');
+dotTotal.setAttribute('r','4'); dotTotal.setAttribute('fill','#A9431E');
+dotTotal.setAttribute('stroke','#fff'); dotTotal.setAttribute('stroke-width','2');
+dotTotal.style.display = 'none'; svg.appendChild(dotTotal);
+
+const dotLarge = document.createElementNS(ns, 'circle');
+dotLarge.setAttribute('r','4'); dotLarge.setAttribute('fill','#002A3A');
+dotLarge.setAttribute('stroke','#fff'); dotLarge.setAttribute('stroke-width','2');
+dotLarge.style.display = 'none'; svg.appendChild(dotLarge);
+
+const tooltip = document.getElementById('ctents-tooltip');
+
+overlay.addEventListener('mousemove', e => {
+  const rect = svg.getBoundingClientRect();
+  const frac = Math.max(0, Math.min(1, ((e.clientX - rect.left) * (W / rect.width) - mL) / cW));
+  const idx = Math.round(frac * n);
+  const pt = raw[idx];
+  const x = xScale(idx);
+
+  vLine.setAttribute('x1', x); vLine.setAttribute('x2', x); vLine.style.display = '';
+  dotTotal.setAttribute('cx', x); dotTotal.setAttribute('cy', yScaleTotal(pt[1])); dotTotal.style.display = '';
+  dotLarge.setAttribute('cx', x); dotLarge.setAttribute('cy', yScaleLarge(pt[2])); dotLarge.style.display = '';
+
+  document.getElementById('ctents-tt-date').textContent = pt[0] + (verified.has(idx) ? ' ★' : '');
+  document.getElementById('ctents-tt-total').textContent = pt[1].toLocaleString();
+  document.getElementById('ctents-tt-large').textContent = pt[2].toLocaleString();
+
+  const noteEl = document.getElementById('ctents-tt-note');
+  if (notes[idx]) {
+    noteEl.textContent = notes[idx];
+    noteEl.style.display = '';
+  } else {
+    noteEl.style.display = 'none';
+  }
+
+  tooltip.classList.add('visible');
+  tooltip.style.left = Math.min(e.clientX + 14, window.innerWidth - 240) + 'px';
+  tooltip.style.top = (e.clientY - 10) + 'px';
+});
+
+overlay.addEventListener('mouseleave', () => {
+  vLine.style.display = 'none'; dotTotal.style.display = 'none'; dotLarge.style.display = 'none';
+  tooltip.classList.remove('visible');
+});
+
+})();
+</script>
+
+</body>
+</html>
